@@ -7,7 +7,8 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-template<typename T>class Matrix{
+template<typename T>
+class Matrix{
 private:
     int row,col;
     vector<vector<T>> mat;
@@ -18,7 +19,14 @@ public:
     Matrix<T> operator+(const Matrix<T> & m);
 };
 
+class Matrix_notCompare_Exception : public exception
+{
+    public:
+    string error;
+    Matrix_notCompare_Exception(string e) {error = e;}
+    const char* what() const {return error.c_str();}
 
+};
 
 
 template<typename T>
@@ -53,19 +61,24 @@ Matrix<T>::Matrix(const vector <vector<T>> &mat) {
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T> & m) 
 {
-    if(this->row == m.row && this->col == m.col)
+    try
     {
-        Matrix<T> total(row,col);
-        for(int i = 0; i < this->row; i++)
-            for(int j = 0; j < this->col; j++)
-                total.mat[i][j] = this->mat[i][j] + m.mat[i][j];
-        return total;
-    }
-    else
+        if(this->row == m.row && this->col == m.col)
+        {
+            Matrix<T> total(row,col);
+            for(int i = 0; i < this->row; i++)
+                for(int j = 0; j < this->col; j++)
+                    total.mat[i][j] = this->mat[i][j] + m.mat[i][j];
+            return total;
+        }
+        else
+            throw "Error";
+        }
+    catch()
     {
-        throw "Error";
-        return nullptr;
+        
     }
+
         
 }
 
