@@ -3,5 +3,5 @@
 using namespace std;
 int main(){
     vector<int> arr;
-    arr[1]
+    arr[1] = 0;
 }
