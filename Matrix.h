@@ -35,6 +35,7 @@ public:
         return os;
     }
     T det();
+    vector<T> &operator[](int index);
 
 };
 
@@ -89,6 +90,13 @@ bool Matrix<T>::change_item_by_index(int row_index, int col_index, T value) {
 template<typename T>
 T Matrix<T>::det() {
     return nullptr;
+}
+/*
+ * 越界报错未添加
+ */
+template<typename T>
+vector<T> & Matrix<T>::operator[](int index) {
+    return mat[index];
 }
 
 
