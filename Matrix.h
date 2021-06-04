@@ -2,8 +2,8 @@
 // Created by 11383 on 2021/5/13.
 //
 
-#ifndef CS205_PROJECT_MATRIX_H
-#define CS205_PROJECT_MATRIX_H
+#ifndef CPP_PROJECT_MATRIX_H
+#define CPP_PROJECT_MATRIX_H
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -16,16 +16,17 @@ public:
     explicit Matrix<T>(int row,int col);
 };
 
+
+
+
 template<typename T>
-
-
-template<typename T>
-Matrix<T>::Matrix<T>(int row, int col) {
-
+Matrix<T>::Matrix(int row, int col) {
+    this->row = row;
+    this->col = col;
 }
 
 template<typename T>
-Matrix<T>::Matrix<T>(const vector <vector<T>> &mat) {
+Matrix<T>::Matrix(const vector <vector<T>> &mat) {
     this->row = mat.size();
     int max = 0;
     for (vector<T> s:mat) {
@@ -34,14 +35,18 @@ Matrix<T>::Matrix<T>(const vector <vector<T>> &mat) {
         }
     }
     vector<vector<T>> s;
+    vector<T> temp;
     this->mat = s;
     for (int i = 0; i < mat.size(); ++i) {
-        this->mat.push_back(vector<T>);
+        this->mat.push_back(temp);
         for (int j = 0; j < s[i].size(); ++j) {
             this->mat[i].push_back(mat[i][j]);
+        }
+        for (int j = s[i].size(); j <max ; ++j) {
+            this->mat.push_back(static_cast<T>(0));
         }
     }
 }
 
 
-#endif //CS205_PROJECT_MATRIX_H
+#endif //CPP_PROJECT_MATRIX_H
