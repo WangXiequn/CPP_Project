@@ -34,6 +34,7 @@ public:
         }
         return os;
     }
+    T det();
 
 };
 
@@ -85,7 +86,10 @@ bool Matrix<T>::change_item_by_index(int row_index, int col_index, T value) {
     return true;
 }
 
-
+template<typename T>
+T Matrix<T>::det() {
+    return nullptr;
+}
 
 
 #endif //CPP_PROJECT_MATRIX_H
