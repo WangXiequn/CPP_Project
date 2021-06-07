@@ -22,6 +22,7 @@ public:
     bool change_item_by_index(int row_index,int col_index,T value);
     
     Matrix<T> operator+(const Matrix<T> & m);
+    Matrix<T> operator-(const Matrix<T> & m);
     friend ostream &operator<<(ostream &os, const Matrix<T> &matrix){
         for (int i = 0; i < matrix.row; ++i) {
             os<<"[";
@@ -133,6 +134,28 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> & m)
       
 }
 
+template<typename T>
+Matrix<T> Matrix<T>::operator-(const Matrix<T> & m) 
+{
+    try
+    {
+        if(this->row == m.row && this->col == m.col)
+        {
+            Matrix<T> total(row,col);
+            for(int i = 0; i < this->row; i++)
+                for(int j = 0; j < this->col; j++)
+                    total.mat[i][j] = this->mat[i][j] - m.mat[i][j];
+            return total;
+        }
+        else
+            throw Matrix_notCompare_Exception("Matrix not compared.");
+        }
+    catch(Matrix_notCompare_Exception e)
+    {
+        cout << e.error << endl;
+    }
+      
+}
 
 
 #endif //CPP_PROJECT_MATRIX_H
