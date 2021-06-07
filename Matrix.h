@@ -23,6 +23,7 @@ public:
     
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
+    Matrix<T> operator*(const Matrix<T> & m);
     friend ostream &operator<<(ostream &os, const Matrix<T> &matrix){
         for (int i = 0; i < matrix.row; ++i) {
             os<<"[";
@@ -155,6 +156,31 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> & m)
         cout << e.error << endl;
     }
       
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
+{
+    try{
+        if(this->col == m.row)
+        {
+            Matrix<T> total(this->row,m.col);
+            for(int k = 0; k < m.row; k++)
+                for(int i = 0; i < this->row; i++)
+                {
+                    int r = this->mat[i][k];
+                    for(int j = 0; j < m.col; j++)
+                        total[i][j] += r * m[k][j];
+                }   
+            return total;
+        }
+        else{
+            throw Matrix_notCompare_Exception("The column of first matrix not same with the row of the second matrix.");
+        }
+    }catch(exception e){
+        cout << e.error << endl;
+    }
+
 }
 
 
