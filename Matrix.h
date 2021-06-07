@@ -22,10 +22,11 @@ public:
     bool change_item_by_index(int row_index,int col_index,T value);
     T dot(const Matrix<T> & m);
     Matrix<T> mul(const Matrix<T> & m);
-    
+
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
     Matrix<T> operator*(const Matrix<T> & m);
+    Matrix<T> operator/(const T v);
     
     friend ostream &operator<<(ostream &os, const Matrix<T> &matrix){
         for (int i = 0; i < matrix.row; ++i) {
@@ -42,6 +43,29 @@ public:
         }
         return os;
     }
+    
+    friend Matrix<T> operator*(const Matrix<T> & m, const T v)
+    {
+        Matrix<T> total(m.row,m.col);
+        if(v == 0)
+            return total;
+        for(int i = 0; i < m.row; i++)
+            for(int j = 0; j < m.col; j++)
+                total[i][j] = m.mat[i][j] * v;
+        return total;
+    }
+
+    friend Matrix<T> operator*( const T v, const Matrix<T> & m)
+    {
+        Matrix<T> total(m.row,m.col);
+        if(v == 0)
+            return total;
+        for(int i = 0; i < m.row; i++)
+            for(int j = 0; j < m.col; j++)
+                total[i][j] = m.mat[i][j] * v;
+        return total;
+    }
+    
     T det();
     vector<T> &operator[](int index);
 
@@ -54,6 +78,14 @@ class Matrix_notCompare_Exception : public exception
     Matrix_notCompare_Exception(string e) {error = e;}
     const char* what() const {return error.c_str();}
 
+};
+
+class Divide_zero_Exception : public exception
+{
+    public:
+    string error;
+    Divide_zero_Exception(string e) {error = e;}
+    const char* what() const {return error.c_str();}
 };
 
 template<typename T>
@@ -224,6 +256,26 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
         cout << e.error << endl;
     }
 
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator/(const T v)
+{
+    try{
+        if(v != 0)
+        {
+            Matrix<T> total(row,col);
+            for(int i = 0; i < this->row; i++)
+                for(int j = 0; j < this->col; j++)
+                    total.mat[i][j] = this->mat[i][j]/v;
+            return total;    
+        }
+        else
+            throw Divide_zero_Exception();
+    }catch(Divide_zero_Exception e){
+        cout << e.error << endl;
+    }
+    
 }
 
 
