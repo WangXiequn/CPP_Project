@@ -20,10 +20,12 @@ public:
     explicit Matrix<T>(int row,int col);
 
     bool change_item_by_index(int row_index,int col_index,T value);
+    double dot(const Matrix<T> & m);
     
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
     Matrix<T> operator*(const Matrix<T> & m);
+    
     friend ostream &operator<<(ostream &os, const Matrix<T> &matrix){
         for (int i = 0; i < matrix.row; ++i) {
             os<<"[";
@@ -99,6 +101,25 @@ bool Matrix<T>::change_item_by_index(int row_index, int col_index, T value) {
     this->mat[row_index-1][col_index-1] = value;
     return true;
 }
+
+template<typename T>
+double Matrix<T>::dot(const Matrix<T> & m)
+{
+    try{
+        if(this->row == 1 && m.row == 1)
+        {
+            double result;
+            for(int i = 0; i < col; i++)
+                result += this->mat[0][i] * m.mat[0][i];
+            return result;
+        }
+        else
+            throw Matrix_notCompare_Exception("It is not vector, no dot product.");
+    }catch(Matrix_notCompare_Exception e){
+        cout << e.error << endl;
+    }
+}
+
 
 template<typename T>
 T Matrix<T>::det() {
@@ -177,7 +198,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
         else{
             throw Matrix_notCompare_Exception("The column of first matrix not same with the row of the second matrix.");
         }
-    }catch(exception e){
+    }catch(Matrix_notCompare_Exception e){
         cout << e.error << endl;
     }
 
