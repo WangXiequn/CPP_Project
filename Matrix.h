@@ -26,7 +26,7 @@ public:
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
     Matrix<T> operator*(const Matrix<T> & m);
-    Matrix<T> operator/(const T v);
+    Matrix<T> operator/(const T & v);
     
     friend ostream &operator<<(ostream &os, const Matrix<T> &matrix){
         for (int i = 0; i < matrix.row; ++i) {
@@ -259,7 +259,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator/(const T v)
+Matrix<T> Matrix<T>::operator/(const T & v)
 {
     try{
         if(v != 0)
