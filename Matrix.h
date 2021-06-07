@@ -21,6 +21,7 @@ public:
 
     bool change_item_by_index(int row_index,int col_index,T value);
     T dot(const Matrix<T> & m);
+    Matrix<T> mul(const Matrix<T> & m);
     
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
@@ -120,6 +121,28 @@ T Matrix<T>::dot(const Matrix<T> & m)
     }
 }
 
+template<typename T>
+Matrix<T> Matrix<T>::mul(const Matrix<T> & m)
+{
+    try
+    {
+        if(this->row == m.row && this->col == m.col)
+        {
+            Matrix<T> total(row,col);
+            for(int i = 0; i < this->row; i++)
+                for(int j = 0; j < this->col; j++)
+                    total.mat[i][j] = this->mat[i][j] * m.mat[i][j];
+            return total;
+        }
+        else
+            throw Matrix_notCompare_Exception("Matrix not compared.");
+    }
+    catch(Matrix_notCompare_Exception e)
+    {
+        cout << e.error << endl;
+    }
+}
+
 
 template<typename T>
 T Matrix<T>::det() {
@@ -148,7 +171,7 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> & m)
         }
         else
             throw Matrix_notCompare_Exception("Matrix not compared.");
-        }
+    }
     catch(Matrix_notCompare_Exception e)
     {
         cout << e.error << endl;
@@ -171,7 +194,7 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> & m)
         }
         else
             throw Matrix_notCompare_Exception("Matrix not compared.");
-        }
+    }
     catch(Matrix_notCompare_Exception e)
     {
         cout << e.error << endl;
@@ -195,9 +218,8 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
                 }   
             return total;
         }
-        else{
+        else
             throw Matrix_notCompare_Exception("The column of first matrix not same with the row of the second matrix.");
-        }
     }catch(Matrix_notCompare_Exception e){
         cout << e.error << endl;
     }
