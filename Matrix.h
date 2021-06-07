@@ -20,7 +20,7 @@ public:
     explicit Matrix<T>(int row,int col);
 
     bool change_item_by_index(int row_index,int col_index,T value);
-    double dot(const Matrix<T> & m);
+    T dot(const Matrix<T> & m);
     
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
@@ -103,12 +103,12 @@ bool Matrix<T>::change_item_by_index(int row_index, int col_index, T value) {
 }
 
 template<typename T>
-double Matrix<T>::dot(const Matrix<T> & m)
+T Matrix<T>::dot(const Matrix<T> & m)
 {
     try{
         if(this->row == 1 && m.row == 1)
         {
-            double result;
+            T result;
             for(int i = 0; i < col; i++)
                 result += this->mat[0][i] * m.mat[0][i];
             return result;
