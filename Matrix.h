@@ -23,11 +23,10 @@ public:
     T dot(const Matrix<T> & m);
     Matrix<T> mul(const Matrix<T> & m);
     Matrix<T> Tr();
-    Matrix<T> cg();  
 
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
-    Matrix<T> operator*(const Matrix<T> & m);
+    Matrix<T> operator*(Matrix<T> & m);
     Matrix<T> operator/(const T & v);
     
     friend ostream &operator<<(ostream &os, const Matrix<T> &matrix){
@@ -57,7 +56,7 @@ public:
         return total;
     }
 
-    friend Matrix<T> operator*( const T v, const Matrix<T> & m)
+    friend Matrix<T> operator*(const T v, const Matrix<T> & m)
     {
         Matrix<T> total(m.row,m.col);
         if(v == 0)
@@ -67,7 +66,17 @@ public:
                 total[i][j] = m.mat[i][j] * v;
         return total;
     }
-    
+
+    friend Matrix<complex<float>> conjugation(const Matrix<complex<float>> & m)
+    {
+        Matrix<complex<float>> cg_m(m.col,m.row);
+        for(int i = 0; i < m.col; i++)
+            for(int j = 0; j < m.row; j++)
+                cg_m[i][j] =conj(m.mat[j][i]);
+            
+        return cg_m; 
+    }  
+  
     T det();
     vector<T> &operator[](int index);
 
@@ -78,7 +87,7 @@ class Matrix_notCompare_Exception : public exception
     public:
     string error;
     Matrix_notCompare_Exception(string e) {error = e;}
-    const char* what() const {return error.c_str();}
+    const char* what() {return error.c_str();}
 
 };
 
@@ -87,7 +96,7 @@ class Divide_zero_Exception : public exception
     public:
     string error;
     Divide_zero_Exception(string e) {error = e;}
-    const char* what() const {return error.c_str();}
+    const char* what() {return error.c_str();}
 };
 
 template<typename T>
@@ -175,6 +184,8 @@ Matrix<T> Matrix<T>::mul(const Matrix<T> & m)
     {
         cout << e.error << endl;
     }
+
+    return (*this);
 }
 
 template<typename T>
@@ -185,28 +196,6 @@ Matrix<T> Matrix<T>::Tr()
         for(int j = 0; j < row; j++) 
             tr_m.mat[i][j] = mat[j][i];
     return tr_m;
-}
-
-template<typename T>
-Matrix<T> Matrix<T>::cg()
-{
-    if(typeid(T) != typeid(complex<float>) &&
-       typeid(T) != typeid(complex<double>) &&
-       typeid(T) != typeid(complex<long double>))
-    {
-        return this->Tr();
-    }
-    else
-    {
-        Matrix<T> cg_m(col,row);
-        for(int i = 0; i < col; i++)
-            for(int j = 0; j < row; j++)
-            {
-                cg_m.mat[i][j].real = mat[j][i].real;
-                cg_m.mat[i][j].imag = -mat[j][j].imag;
-            }
-        return cg_m;        
-    }
 }
 
 template<typename T>
@@ -241,7 +230,7 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> & m)
     {
         cout << e.error << endl;
     }
-      
+    return (*this);
 }
 
 template<typename T>
@@ -264,11 +253,11 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> & m)
     {
         cout << e.error << endl;
     }
-      
+    return (*this);  
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
+Matrix<T> Matrix<T>::operator*(Matrix<T> & m)
 {
     try{
         if(this->col == m.row)
@@ -279,7 +268,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
                 {
                     int r = this->mat[i][k];
                     for(int j = 0; j < m.col; j++)
-                        total[i][j] += r * m[k][j];
+                        total[i][j] += m[k][j] * r;
                 }   
             return total;
         }
@@ -288,7 +277,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> & m)
     }catch(Matrix_notCompare_Exception e){
         cout << e.error << endl;
     }
-
+    return (*this);
 }
 
 template<typename T>
@@ -304,11 +293,11 @@ Matrix<T> Matrix<T>::operator/(const T & v)
             return total;    
         }
         else
-            throw Divide_zero_Exception();
+            throw Divide_zero_Exception("You can't divide zero");
     }catch(Divide_zero_Exception e){
         cout << e.error << endl;
     }
-    
+    return (*this);
 }
 
 

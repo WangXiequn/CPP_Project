@@ -1,6 +1,17 @@
 {
     "files.associations": {
         "iostream": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "any": "cpp",
+        "bitset": "cpp",
+        "exception": "cpp",
+        "future": "cpp",
+        "new": "cpp",
+        "optional": "cpp",
+        "stdexcept": "cpp",
+        "functional": "cpp",
+        "regex": "cpp",
+        "typeinfo": "cpp",
+        "variant": "cpp"
     }
 }
