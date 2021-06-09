@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/tmp/tutorial/project/CPP_Project/Matrix.h
+bits/stdc++.h
+-
+ostream
+-
+complex
+-
+
+/tmp/tutorial/project/CPP_Project/main.cpp
+bits/stdc++.h
+-
+opencv4/opencv2/opencv.hpp
+-
+Matrix.h
+/tmp/tutorial/project/CPP_Project/Matrix.h
+

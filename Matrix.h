@@ -21,8 +21,12 @@ public:
 
     bool change_item_by_index(int row_index,int col_index,T value);
     T dot(const Matrix<T> & m);
+    vector<T> cross(const vector<T> & m);
+    Matrix<T> cross(const Matrix<T> & m);
+    vector<T> v_mul(const vector<T> & v);
     Matrix<T> mul(const Matrix<T> & m);
     Matrix<T> Tr();
+    Matrix<T> conjgg();
 
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
@@ -67,15 +71,7 @@ public:
         return total;
     }
 
-    friend Matrix<complex<float>> conjugation(const Matrix<complex<float>> & m)
-    {
-        Matrix<complex<float>> cg_m(m.col,m.row);
-        for(int i = 0; i < m.col; i++)
-            for(int j = 0; j < m.row; j++)
-                cg_m[i][j] =conj(m.mat[j][i]);
-            
-        return cg_m; 
-    }  
+
   
     T det();
     vector<T> &operator[](int index);
@@ -98,6 +94,15 @@ class Divide_zero_Exception : public exception
     Divide_zero_Exception(string e) {error = e;}
     const char* what() {return error.c_str();}
 };
+
+template<typename U, typename = void>
+struct is_complex_imp : false_type {};
+
+template<typename U>
+struct is_complex_imp<std::complex<U>> : true_type {};
+
+template<typename U>
+constexpr bool is_complex() { return is_complex_imp<U>(); }
 
 template<typename T>
 Matrix<T>::Matrix(int row, int col) {
@@ -162,6 +167,91 @@ T Matrix<T>::dot(const Matrix<T> & m)
     }catch(Matrix_notCompare_Exception e){
         cout << e.error << endl;
     }
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::cross(const Matrix<T> & m)
+{
+    try{
+        if(m.row == 1 && m.col == 3 && this->row == 1 && this->col == 3 ) 
+        {
+            Matrix<T> cross_result(1,3);
+            cross_result->mat[0][0] = this->mat[0][1]*m.mat[1][2]-this->mat[0][2]*m.mat[1][1];
+            cross_result->mat[0][1] = this->mat[0][2]*m.mat[1][0]-this->mat[0][0]*m.mat[1][2];
+            cross_result->mat[0][2] = this->mat[0][0]*m.mat[1][1]-this->mat[0][1]*m.mat[1][0];
+            return cross_result;
+        } 
+        else 
+        {
+            throw Matrix_notCompare_Exception("Not vector.");
+        }
+    } catch (Matrix_notCompare_Exception e) {
+        cout << e.error << endl;
+    }
+
+    return nullptr;
+}
+
+template<typename T>
+vector<T> Matrix<T>::cross(const vector<T> & m)
+{
+    try{
+        if(m.row == 1 && m.col == 3 && this->row == 1 && this->col == 3 ) 
+        {
+            vector<T> cross_result(1,3);
+            cross_result.push_back(this->mat[0][1]*m.mat[1][2]-this->mat[0][2]*m.mat[1][1]);
+            cross_result.push_back(this->mat[0][2]*m.mat[1][0]-this->mat[0][0]*m.mat[1][2]);
+            cross_result.push_back(this->mat[0][0]*m.mat[1][1]-this->mat[0][1]*m.mat[1][0]);
+            return cross_result;
+        } 
+        else 
+        {
+            throw Matrix_notCompare_Exception("Not vector.");
+        }
+    } catch (Matrix_notCompare_Exception e) {
+        cout << e.error << endl;
+    }
+
+    return nullptr;
+}
+
+template<typename T>
+vector<T> Matrix<T>::v_mul(const vector<T> & v)
+{
+    try {
+        if ( col == v.size()) {
+            vector<T> result;
+            for(int i = 0; i < col; i++)
+            {
+                T middle;
+                for(int j = 0; j < row; j++)
+                    middle += mat[i][j] * v[i];
+                result.push_back(middle);
+            }
+            return result;                    
+        } else {
+            throw Matrix_notCompare_Exception("the col of the matrix and the size of v not compared.");
+        }
+    } catch (Matrix_notCompare_Exception e) {
+        cout << e.error << endl;
+    }
+    return (vector<T>)NULL;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::conjgg()
+{
+    if constexpr(is_complex<T>()) 
+    {
+        Matrix<T> cg_m(col,row);
+        for(int i = 0; i < col; i++)
+            for(int j = 0; j < row; j++)
+                cg_m[i][j] = conj(mat[j][i]);
+        return cg_m; 
+    }
+    else 
+        return this->Tr();
+     
 }
 
 template<typename T>
