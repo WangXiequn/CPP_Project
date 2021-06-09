@@ -7,7 +7,7 @@
 
 #include <bits/stdc++.h>
 #include <ostream>
-
+#include <complex>
 
 using namespace std;
 template<typename T>
@@ -16,12 +16,14 @@ private:
     int row,col;
     vector<vector<T>> mat;
 public:
-    explicit Matrix<T>(const vector<vector< T>> & mat);
+    explicit Matrix<T>(const vector<vector<T>> & mat);
     explicit Matrix<T>(int row,int col);
 
     bool change_item_by_index(int row_index,int col_index,T value);
     T dot(const Matrix<T> & m);
     Matrix<T> mul(const Matrix<T> & m);
+    Matrix<T> Tr();
+    Matrix<T> cg();  
 
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
@@ -175,6 +177,37 @@ Matrix<T> Matrix<T>::mul(const Matrix<T> & m)
     }
 }
 
+template<typename T>
+Matrix<T> Matrix<T>::Tr()
+{
+    Matrix<T> tr_m(col,row);
+    for(int i = 0; i < col; i++)
+        for(int j = 0; j < row; j++) 
+            tr_m.mat[i][j] = mat[j][i];
+    return tr_m;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::cg()
+{
+    if(typeid(T) != typeid(complex<float>) &&
+       typeid(T) != typeid(complex<double>) &&
+       typeid(T) != typeid(complex<long double>))
+    {
+        return this->Tr();
+    }
+    else
+    {
+        Matrix<T> cg_m(col,row);
+        for(int i = 0; i < col; i++)
+            for(int j = 0; j < row; j++)
+            {
+                cg_m.mat[i][j].real = mat[j][i].real;
+                cg_m.mat[i][j].imag = -mat[j][j].imag;
+            }
+        return cg_m;        
+    }
+}
 
 template<typename T>
 T Matrix<T>::det() {
