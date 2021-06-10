@@ -229,7 +229,7 @@ vector<T> Matrix<T>::v_mul(const vector<T> & v)
         vector<T> result;
         for(int i = 0; i < row; i++)
         {
-            T middle;
+            T middle = 0;
             for(int j = 0; j < col; j++)
                 middle += mat[i][j] * v[i];
             result.push_back(middle);
