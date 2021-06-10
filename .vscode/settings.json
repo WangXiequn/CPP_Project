@@ -12,6 +12,8 @@
         "functional": "cpp",
         "regex": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "iosfwd": "cpp",
+        "tuple": "cpp"
     }
 }

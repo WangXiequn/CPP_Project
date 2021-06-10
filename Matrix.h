@@ -32,6 +32,7 @@ public:
     Matrix<T> operator+(const Matrix<T> & m);
     Matrix<T> operator-(const Matrix<T> & m);
     Matrix<T> operator*(Matrix<T> & m);
+    //vector<T> operator*(const vector<T> & v);
     Matrix<T> operator/(const T & v);
     
     friend ostream &operator<<(ostream &os, const Matrix<T> &matrix){
@@ -226,10 +227,10 @@ vector<T> Matrix<T>::v_mul(const vector<T> & v)
 {
     if ( col == v.size()) {
         vector<T> result;
-        for(int i = 0; i < col; i++)
+        for(int i = 0; i < row; i++)
         {
             T middle;
-            for(int j = 0; j < row; j++)
+            for(int j = 0; j < col; j++)
                 middle += mat[i][j] * v[i];
             result.push_back(middle);
         }
@@ -238,6 +239,28 @@ vector<T> Matrix<T>::v_mul(const vector<T> & v)
         throw Matrix_notCompare_Exception("the col of the matrix and the size of v not compared.");
 
 }
+
+//matrix_vector multiple
+// template<typename T>
+// vector<T> Matrix<T>::operator*(const vector<T> & v)
+// {
+//     if ( col == v.size()) {
+//         vector<T> result;
+//         for(int i = 0; i < row; i++)
+//         {
+//             T middle;
+//             for(int j = 0; j < col; j++)
+//                 middle += mat[i][j] * v[j];
+                
+//             result.push_back(middle);
+            
+//         }
+//         return result;                    
+//     } 
+//     else 
+//         throw Matrix_notCompare_Exception("the col of the matrix and the size of v not compared.");
+
+// }
 
 //Matrix conjugation
 template<typename T>

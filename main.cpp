@@ -24,6 +24,7 @@ int main(){
     for(int i = 0; i < 3; i++)
         m2[0][i] = i+1;
     vector<int> v = m2.cross(u);
+    //vector<int> v2 = m2*u;
     cout << n << endl;
     cout << m << endl;
     cout << m+n << endl;
@@ -36,9 +37,12 @@ int main(){
     cout << m2 << endl;
     
     cout << m2.dot(u) << endl;
-    cout << m2.v_mul(u) << endl;
+    //cout << m2.v_mul(u) << endl;
     for(int i = 0; i < 3; i++)
         cout << v[i] << " ";
+    cout << endl;
+    for(int i = 0; i < 1; i++)
+        cout << v2[i] << " ";
     cout << endl;
     cout << m.Tr() << endl;
     cout << m1.conjgg() << endl;
