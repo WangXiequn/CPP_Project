@@ -154,88 +154,65 @@ bool Matrix<T>::change_item_by_index(int row_index, int col_index, T value) {
 template<typename T>
 T Matrix<T>::dot(const Matrix<T> & m)
 {
-    try{
-        if(this->row == 1 && m.row == 1)
-        {
-            T result;
-            for(int i = 0; i < col; i++)
-                result += this->mat[0][i] * m.mat[0][i];
-            return result;
-        }
-        else
-            throw Matrix_notCompare_Exception("It is not vector, no dot product.");
-    }catch(Matrix_notCompare_Exception e){
-        cout << e.error << endl;
+    if(this->row == 1 && m.row == 1)
+    {
+        T result;
+        for(int i = 0; i < col; i++)
+            result += this->mat[0][i] * m.mat[0][i];
+        return result;
     }
+    else
+        throw Matrix_notCompare_Exception("It is not vector, no dot product.");
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::cross(const Matrix<T> & m)
 {
-    try{
-        if(m.row == 1 && m.col == 3 && this->row == 1 && this->col == 3 ) 
-        {
-            Matrix<T> cross_result(1,3);
-            cross_result->mat[0][0] = this->mat[0][1]*m.mat[1][2]-this->mat[0][2]*m.mat[1][1];
-            cross_result->mat[0][1] = this->mat[0][2]*m.mat[1][0]-this->mat[0][0]*m.mat[1][2];
-            cross_result->mat[0][2] = this->mat[0][0]*m.mat[1][1]-this->mat[0][1]*m.mat[1][0];
-            return cross_result;
-        } 
-        else 
-        {
-            throw Matrix_notCompare_Exception("Not vector.");
-        }
-    } catch (Matrix_notCompare_Exception e) {
-        cout << e.error << endl;
-    }
+    if(m.row == 1 && m.col == 3 && this->row == 1 && this->col == 3 ) 
+    {
+        Matrix<T> cross_result(1,3);
+        cross_result->mat[0][0] = this->mat[0][1]*m.mat[1][2]-this->mat[0][2]*m.mat[1][1];
+        cross_result->mat[0][1] = this->mat[0][2]*m.mat[1][0]-this->mat[0][0]*m.mat[1][2];
+        cross_result->mat[0][2] = this->mat[0][0]*m.mat[1][1]-this->mat[0][1]*m.mat[1][0];
+        return cross_result;
+    } 
+    else 
+        throw Matrix_notCompare_Exception("We only support a matrix with one row of three column and a vector with 3 vcalue's cross product.");
 
-    return nullptr;
 }
 
 template<typename T>
 vector<T> Matrix<T>::cross(const vector<T> & m)
 {
-    try{
-        if(m.row == 1 && m.col == 3 && this->row == 1 && this->col == 3 ) 
-        {
-            vector<T> cross_result(1,3);
-            cross_result.push_back(this->mat[0][1]*m.mat[1][2]-this->mat[0][2]*m.mat[1][1]);
-            cross_result.push_back(this->mat[0][2]*m.mat[1][0]-this->mat[0][0]*m.mat[1][2]);
-            cross_result.push_back(this->mat[0][0]*m.mat[1][1]-this->mat[0][1]*m.mat[1][0]);
-            return cross_result;
-        } 
-        else 
-        {
-            throw Matrix_notCompare_Exception("Not vector.");
-        }
-    } catch (Matrix_notCompare_Exception e) {
-        cout << e.error << endl;
-    }
+    if(m.row == 1 && m.col == 3 && this->row == 1 && this->col == 3 ) 
+    {
+        vector<T> cross_result(1,3);
+        cross_result.push_back(this->mat[0][1]*m.mat[1][2]-this->mat[0][2]*m.mat[1][1]);
+        cross_result.push_back(this->mat[0][2]*m.mat[1][0]-this->mat[0][0]*m.mat[1][2]);
+        cross_result.push_back(this->mat[0][0]*m.mat[1][1]-this->mat[0][1]*m.mat[1][0]);
+        return cross_result;
+    } 
+    else 
+        throw Matrix_notCompare_Exception("We only support a matrix with one row of three column and a vector with 3 vcalue's cross product.");
 
-    return nullptr;
 }
 
 template<typename T>
 vector<T> Matrix<T>::v_mul(const vector<T> & v)
 {
-    try {
-        if ( col == v.size()) {
-            vector<T> result;
-            for(int i = 0; i < col; i++)
-            {
-                T middle;
-                for(int j = 0; j < row; j++)
-                    middle += mat[i][j] * v[i];
-                result.push_back(middle);
-            }
-            return result;                    
-        } else {
-            throw Matrix_notCompare_Exception("the col of the matrix and the size of v not compared.");
+    if ( col == v.size()) {
+        vector<T> result;
+        for(int i = 0; i < col; i++)
+        {
+            T middle;
+            for(int j = 0; j < row; j++)
+                middle += mat[i][j] * v[i];
+            result.push_back(middle);
         }
-    } catch (Matrix_notCompare_Exception e) {
-        cout << e.error << endl;
-    }
-    return (vector<T>)NULL;
+        return result;                    
+    } else 
+        throw Matrix_notCompare_Exception("the col of the matrix and the size of v not compared.");
+
 }
 
 template<typename T>
@@ -257,25 +234,16 @@ Matrix<T> Matrix<T>::conjgg()
 template<typename T>
 Matrix<T> Matrix<T>::mul(const Matrix<T> & m)
 {
-    try
+    if(this->row == m.row && this->col == m.col)
     {
-        if(this->row == m.row && this->col == m.col)
-        {
-            Matrix<T> total(row,col);
-            for(int i = 0; i < this->row; i++)
-                for(int j = 0; j < this->col; j++)
-                    total.mat[i][j] = this->mat[i][j] * m.mat[i][j];
-            return total;
-        }
-        else
-            throw Matrix_notCompare_Exception("Matrix not compared.");
+        Matrix<T> total(row,col);
+        for(int i = 0; i < this->row; i++)
+            for(int j = 0; j < this->col; j++)
+                total.mat[i][j] = this->mat[i][j] * m.mat[i][j];
+        return total;
     }
-    catch(Matrix_notCompare_Exception e)
-    {
-        cout << e.error << endl;
-    }
-
-    return (*this);
+    else
+        throw Matrix_notCompare_Exception("Matrix not compared, you should give two matrix with the same col and row");
 }
 
 template<typename T>
@@ -303,91 +271,69 @@ vector<T> & Matrix<T>::operator[](int index) {
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T> & m) 
 {
-    try
+
+    if(this->row == m.row && this->col == m.col)
     {
-        if(this->row == m.row && this->col == m.col)
-        {
-            Matrix<T> total(row,col);
-            for(int i = 0; i < this->row; i++)
-                for(int j = 0; j < this->col; j++)
-                    total.mat[i][j] = this->mat[i][j] + m.mat[i][j];
-            return total;
-        }
-        else
-            throw Matrix_notCompare_Exception("Matrix not compared.");
+        Matrix<T> total(row,col);
+        for(int i = 0; i < this->row; i++)
+            for(int j = 0; j < this->col; j++)
+                total.mat[i][j] = this->mat[i][j] + m.mat[i][j];
+        return total;
     }
-    catch(Matrix_notCompare_Exception e)
-    {
-        cout << e.error << endl;
-    }
-    return (*this);
+    else
+        throw Matrix_notCompare_Exception("matrix not compared, you should give two matrix with the same col and row");
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix<T> & m) 
 {
-    try
+    if(this->row == m.row && this->col == m.col)
     {
-        if(this->row == m.row && this->col == m.col)
-        {
-            Matrix<T> total(row,col);
-            for(int i = 0; i < this->row; i++)
-                for(int j = 0; j < this->col; j++)
-                    total.mat[i][j] = this->mat[i][j] - m.mat[i][j];
-            return total;
-        }
-        else
-            throw Matrix_notCompare_Exception("Matrix not compared.");
+        Matrix<T> total(row,col);
+        for(int i = 0; i < this->row; i++)
+            for(int j = 0; j < this->col; j++)
+                total.mat[i][j] = this->mat[i][j] - m.mat[i][j];
+        return total;
     }
-    catch(Matrix_notCompare_Exception e)
-    {
-        cout << e.error << endl;
-    }
-    return (*this);  
+    else
+        throw Matrix_notCompare_Exception("matrix not compared, you should give two matrix with the same col and row");
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator*(Matrix<T> & m)
 {
-    try{
-        if(this->col == m.row)
-        {
-            Matrix<T> total(this->row,m.col);
-            for(int k = 0; k < m.row; k++)
-                for(int i = 0; i < this->row; i++)
-                {
-                    int r = this->mat[i][k];
-                    for(int j = 0; j < m.col; j++)
-                        total[i][j] += m[k][j] * r;
-                }   
-            return total;
-        }
-        else
-            throw Matrix_notCompare_Exception("The column of first matrix not same with the row of the second matrix.");
-    }catch(Matrix_notCompare_Exception e){
-        cout << e.error << endl;
+
+    if(this->col == m.row)
+    {
+        Matrix<T> total(this->row,m.col);
+        for(int k = 0; k < m.row; k++)
+            for(int i = 0; i < this->row; i++)
+            {
+                int r = this->mat[i][k];
+                for(int j = 0; j < m.col; j++)
+                    total[i][j] += m[k][j] * r;
+            }   
+        return total;
     }
-    return (*this);
+    else
+        throw Matrix_notCompare_Exception("the column of first matrix not same with the row of the second matrix");
+
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator/(const T & v)
 {
-    try{
-        if(v != 0)
-        {
-            Matrix<T> total(row,col);
-            for(int i = 0; i < this->row; i++)
-                for(int j = 0; j < this->col; j++)
-                    total.mat[i][j] = this->mat[i][j]/v;
-            return total;    
-        }
-        else
-            throw Divide_zero_Exception("You can't divide zero");
-    }catch(Divide_zero_Exception e){
-        cout << e.error << endl;
+    if(v != 0)
+    {
+        Matrix<T> total(row,col);
+        for(int i = 0; i < this->row; i++)
+            for(int j = 0; j < this->col; j++)
+                total.mat[i][j] = this->mat[i][j]/v;
+        return total;    
     }
-    return (*this);
+    else
+        throw Divide_zero_Exception("You can't divide zero");
+    
 }
 
 
