@@ -21,6 +21,7 @@ public:
 
     bool change_item_by_index(int row_index,int col_index,T value);
     T dot(const Matrix<T> & m);
+    T dot(const vector<T> & m);
     vector<T> cross(const vector<T> & m);
     Matrix<T> cross(const Matrix<T> & m);
     vector<T> v_mul(const vector<T> & v);
@@ -71,13 +72,14 @@ public:
         return total;
     }
 
-
-  
     T det();
     vector<T> &operator[](int index);
 
 };
 
+//If the input matrix is not compared according to the matrix design, use this exception
+//add exception message in the ()
+//e.g. throw Matrix_notCompare_Exception("Matrix not compared")
 class Matrix_notCompare_Exception : public exception
 {
     public:
@@ -87,6 +89,7 @@ class Matrix_notCompare_Exception : public exception
 
 };
 
+//When divide a zero, it may cost problem, We give a exception to call for zero exception.
 class Divide_zero_Exception : public exception
 {
     public:
@@ -95,6 +98,7 @@ class Divide_zero_Exception : public exception
     const char* what() {return error.c_str();}
 };
 
+//elegant check if the matrix is a type of complex or a real.
 template<typename U, typename = void>
 struct is_complex_imp : false_type {};
 
@@ -151,10 +155,11 @@ bool Matrix<T>::change_item_by_index(int row_index, int col_index, T value) {
     return true;
 }
 
+//vector dot
 template<typename T>
 T Matrix<T>::dot(const Matrix<T> & m)
 {
-    if(this->row == 1 && m.row == 1)
+    if(this->row == 1 && m.row == 1 && this->col == m.col)
     {
         T result;
         for(int i = 0; i < col; i++)
@@ -165,6 +170,24 @@ T Matrix<T>::dot(const Matrix<T> & m)
         throw Matrix_notCompare_Exception("It is not vector, no dot product.");
 }
 
+//vector dot
+template<typename T>
+T Matrix<T>::dot(const vector<T> & m)
+{
+    if(this->row == 1 && m.size() == this->col)
+    {
+        T result = 0;
+        for(int i = 0; i < col; i++)
+            result += this->mat[0][i] * m[i];
+
+            
+        return result;
+    }
+    else
+        throw Matrix_notCompare_Exception("It is not vector, no dot product.");
+}
+
+//vecotor cross
 template<typename T>
 Matrix<T> Matrix<T>::cross(const Matrix<T> & m)
 {
@@ -181,15 +204,16 @@ Matrix<T> Matrix<T>::cross(const Matrix<T> & m)
 
 }
 
+//vector cross
 template<typename T>
 vector<T> Matrix<T>::cross(const vector<T> & m)
 {
-    if(m.row == 1 && m.col == 3 && this->row == 1 && this->col == 3 ) 
+    if( m.size() == 3 && this->row == 1 && this->col == 3 ) 
     {
-        vector<T> cross_result(1,3);
-        cross_result.push_back(this->mat[0][1]*m.mat[1][2]-this->mat[0][2]*m.mat[1][1]);
-        cross_result.push_back(this->mat[0][2]*m.mat[1][0]-this->mat[0][0]*m.mat[1][2]);
-        cross_result.push_back(this->mat[0][0]*m.mat[1][1]-this->mat[0][1]*m.mat[1][0]);
+        vector<T> cross_result;
+        cross_result.push_back(this->mat[0][1]*m[2]-this->mat[0][2]*m[1]);
+        cross_result.push_back(this->mat[0][2]*m[0]-this->mat[0][0]*m[2]);
+        cross_result.push_back(this->mat[0][0]*m[1]-this->mat[0][1]*m[0]);
         return cross_result;
     } 
     else 
@@ -197,6 +221,7 @@ vector<T> Matrix<T>::cross(const vector<T> & m)
 
 }
 
+//matrix-vector multiplication
 template<typename T>
 vector<T> Matrix<T>::v_mul(const vector<T> & v)
 {
@@ -215,6 +240,7 @@ vector<T> Matrix<T>::v_mul(const vector<T> & v)
 
 }
 
+//Matrix conjugation
 template<typename T>
 Matrix<T> Matrix<T>::conjgg()
 {
@@ -231,6 +257,7 @@ Matrix<T> Matrix<T>::conjgg()
      
 }
 
+//element-wise multiplication
 template<typename T>
 Matrix<T> Matrix<T>::mul(const Matrix<T> & m)
 {
@@ -246,6 +273,7 @@ Matrix<T> Matrix<T>::mul(const Matrix<T> & m)
         throw Matrix_notCompare_Exception("Matrix not compared, you should give two matrix with the same col and row");
 }
 
+//Transposition matrix
 template<typename T>
 Matrix<T> Matrix<T>::Tr()
 {
@@ -268,6 +296,7 @@ vector<T> & Matrix<T>::operator[](int index) {
     return mat[index];
 }
 
+//matrix add
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T> & m) 
 {
@@ -284,6 +313,7 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> & m)
         throw Matrix_notCompare_Exception("matrix not compared, you should give two matrix with the same col and row");
 }
 
+//matrix minus
 template<typename T>
 Matrix<T> Matrix<T>::operator-(const Matrix<T> & m) 
 {
@@ -299,6 +329,7 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> & m)
         throw Matrix_notCompare_Exception("matrix not compared, you should give two matrix with the same col and row");
 }
 
+//matrix multiply
 template<typename T>
 Matrix<T> Matrix<T>::operator*(Matrix<T> & m)
 {
@@ -320,6 +351,7 @@ Matrix<T> Matrix<T>::operator*(Matrix<T> & m)
 
 }
 
+//scalar divide
 template<typename T>
 Matrix<T> Matrix<T>::operator/(const T & v)
 {
