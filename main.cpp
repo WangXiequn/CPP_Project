@@ -36,6 +36,7 @@ int main(){
     cout << m2 << endl;
     
     cout << m2.dot(u) << endl;
+    cout << m2.v_mul(u) << endl;
     for(int i = 0; i < 3; i++)
         cout << v[i] << " ";
     cout << endl;
