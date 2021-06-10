@@ -86,7 +86,6 @@ class Matrix_notCompare_Exception : public exception
     string error;
     Matrix_notCompare_Exception(string e) {error = e;}
     const char* what() {return error.c_str();}
-
 };
 
 //When divide a zero, it may cost problem, We give a exception to call for zero exception.
